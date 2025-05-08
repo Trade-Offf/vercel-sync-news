@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manual Sync</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin-top: 50px;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Manual Sync Trigger</h1>
+    <button id="syncButton">Trigger Sync</button>
+    <p id="status"></p>
+    <h2>Last Sync Info</h2>
+    <p id="lastSyncTime">Last Sync Time: N/A</p>
+    <p id="lastUpdatedCount">Last Updated Count: N/A</p>
+    <p id="lastSyncError">Last Sync Error: None</p>
+
+    <script>
+      async function fetchLastSyncInfo() {
+        try {
+          const response = await fetch('/api/last-sync-info');
+          if (response.ok) {
+            const data = await response.json();
+            document.getElementById('lastSyncTime').textContent = `Last Sync Time: ${
+              data.lastSyncTime || 'N/A'
+            }`;
+            document.getElementById('lastUpdatedCount').textContent = `Last Updated Count: ${
+              data.lastUpdatedCount || 0
+            }`;
+            document.getElementById('lastSyncError').textContent = data.lastSyncError
+              ? `Last Sync Error: ${data.lastSyncError}`
+              : 'Last Sync Error: None';
+          } else {
+            console.error('Failed to fetch last sync info.');
+          }
+        } catch (error) {
+          console.error('Error fetching last sync info:', error);
+        }
+      }
+
+      document.getElementById('syncButton').addEventListener('click', async () => {
+        const statusElement = document.getElementById('status');
+        statusElement.textContent = 'Syncing...';
+
+        try {
+          const response = await fetch('/api/manual-sync');
+          if (response.ok) {
+            const result = await response.json();
+            statusElement.textContent = result.message;
+            await fetchLastSyncInfo(); // 更新同步信息
+          } else {
+            statusElement.textContent = 'Failed to execute sync.';
+          }
+        } catch (error) {
+          statusElement.textContent = 'Error occurred while syncing.';
+          console.error(error);
+        }
+      });
+
+      // 定期刷新同步信息
+      setInterval(fetchLastSyncInfo, 5000); // 每 5 秒刷新一次
+      fetchLastSyncInfo(); // 页面加载时立即获取同步信息
+    </script>
+  </body>
+</html>

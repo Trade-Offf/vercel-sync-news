@@ -1,0 +1,17 @@
+name: Trigger Sync Task
+
+on:
+  schedule:
+    # 每小时触发一次
+    - cron: '0 * * * *'
+
+jobs:
+  trigger-sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 使用 curl 发送 POST 请求到 Vercel 的 API
+      - name: Trigger Sync Task
+        run: |
+          curl -X POST https://your-vercel-deployment.vercel.app/api/manual-sync \
+          -H "Content-Type: application/json"
