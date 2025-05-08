@@ -3,7 +3,7 @@ const router = express.Router();
 
 module.exports = (app, syncTaskController) => {
   // 手动触发同步的路由
-  router.get('/manual-sync', async (req, res) => {
+  router.post('/manual-sync', async (req, res) => {
     try {
       await syncTaskController.fetchAndSyncData();
       res.json({ message: 'Manual sync triggered successfully.' });
