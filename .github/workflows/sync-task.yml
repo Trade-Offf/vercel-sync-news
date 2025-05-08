@@ -3,10 +3,15 @@ name: Trigger Sync Task
 on:
   # 支持定时触发
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '0 * * * *'
 
   # 支持手动触发
   workflow_dispatch:
+
+    # 支持代码提交触发
+  push:
+    branches:
+      - main
 
 jobs:
   trigger-sync:
