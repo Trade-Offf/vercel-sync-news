@@ -13,5 +13,5 @@ jobs:
       # 使用 curl 发送 POST 请求到 Vercel 的 API
       - name: Trigger Sync Task
         run: |
-          curl -X POST https://your-vercel-deployment.vercel.app/api/manual-sync \
+          curl -X POST https://vercel-webhook-service.vercel.app/api/manual-sync \
           -H "Content-Type: application/json"
