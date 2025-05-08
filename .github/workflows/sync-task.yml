@@ -1,9 +1,12 @@
 name: Trigger Sync Task
 
 on:
+  # 支持定时触发
   schedule:
-    # 每小时触发一次
-    - cron: '0 * * * *'
+    - cron: '0 * * * *' # 每小时触发一次
+
+  # 支持手动触发
+  workflow_dispatch:
 
 jobs:
   trigger-sync:
